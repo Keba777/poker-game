@@ -75,10 +75,10 @@ class HandRepository:
             return [
                 Hand(
                     uuid.UUID(row[0]),
-                    [Player(**p) for p in json.loads(row[1])],
-                    json.loads(row[2]),
-                    json.loads(row[3]),
-                    json.loads(row[4]),
+                    [Player(**p) for p in row[1]],
+                    row[2],
+                    row[3],
+                    row[4],
                     row[5],
                 )
                 for row in rows

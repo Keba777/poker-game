@@ -1,11 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
-from src.poker.models.player import Player
-from src.poker.models.hand import Hand
 from src.poker.repositories.hand_repository import HandRepository
 from src.poker.services.poker_service import PokerService
-import uuid
-import json
+
 
 app = FastAPI()
 
