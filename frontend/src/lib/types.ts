@@ -15,3 +15,11 @@ export interface Hand {
     winnings: Record<string, number>;
     completed?: boolean;
 }
+
+export interface createHandInput {
+    players: Player[];
+    actions: string[];
+    cards: Record<string, string[]>;
+    winnings: Record<string, number>;
+    completed?: boolean;
+}

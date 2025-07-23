@@ -15,7 +15,7 @@ export default function Home() {
         { id: "2", stack: 1000, position: 1 },
       ])
   );
-  const [currentPlayerId, setCurrentPlayerId] = useState("1");
+  const [currentPlayerId, _] = useState("1");
 
   useEffect(() => {
     if (!game.getCurrentHand()) game.startHand();

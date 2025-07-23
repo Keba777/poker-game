@@ -119,6 +119,7 @@ export class GameLogic {
     }
 
     isActionValid(playerId: string, action: string, amount?: number) {
+        console.log(`Validating action: ${action} for player: ${playerId}`);
         if (!this.currentHand) return false;
         const lastAction = this.currentHand.actions[this.currentHand.actions.length - 1];
         switch (action) {
