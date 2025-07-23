@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://poker_user:poker_pass@db:5432/poker
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=poker_user
+      - POSTGRES_PASSWORD=poker_pass
+      - POSTGRES_DB=poker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
