@@ -45,16 +45,21 @@ class PokerService:
         for p_id, cards_list in cards.items():
             state.deal_hole("".join(cards_list))
         for action in actions:
-            if action.startswith("b"):
-                state.complete_bet_or_raise_to(int(action[1:]))
-            elif action.startswith("r"):
-                state.complete_bet_or_raise_to(int(action[1:]))
-            elif action == "c":
-                state.check_or_call()
-            elif action == "f":
-                state.fold()
-            elif action == "allin":
-                state.complete_bet_or_raise_to(max(p.stack for p in players))
+            try:
+                if action.startswith("b"):
+                    state.complete_bet_or_raise_to(int(action[1:]))
+                elif action.startswith("r"):
+                    state.complete_bet_or_raise_to(int(action[1:]))
+                elif action == "c":
+                    state.check_or_call()
+                elif action == "f":
+                    state.fold()
+                elif action == "allin":
+                    state.complete_bet_or_raise_to(max(p.stack for p in players))
+            except ValueError as e:
+                print(f"Skipping invalid action '{action}': {e}")
+                break
+
 
         winnings = {p.id: state.payoffs[i] for i, p in enumerate(players)}
         hand = Hand(hand_id, players, actions, cards, winnings, True)

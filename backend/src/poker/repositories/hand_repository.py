@@ -11,7 +11,7 @@ class HandRepository:
             dbname="poker",
             user="poker_user",
             password="poker_pass",
-            host="localhost",
+            host="db",
             port="5432",
         )
         self.create_table()
@@ -33,6 +33,16 @@ class HandRepository:
             self.conn.commit()
 
     def save(self, hand: Hand):
+        def player_to_dict(p):
+            return {
+                "id": str(p.id),
+                "stack": p.stack,
+                "position": p.position,
+                "is_dealer": p.is_dealer,
+                "is_small_blind": p.is_small_blind,
+                "is_big_blind": p.is_big_blind,
+            }
+
         with self.conn.cursor() as cur:
             cur.execute(
                 """
@@ -46,11 +56,11 @@ class HandRepository:
                     completed = EXCLUDED.completed
             """,
                 (
-                    hand.id,
-                    json.dumps([p.__dict__ for p in hand.players]),
+                    str(hand.id),
+                    json.dumps([player_to_dict(p) for p in hand.players]),
                     json.dumps(hand.actions),
-                    json.dumps(hand.cards),
-                    json.dumps(hand.winnings),
+                    json.dumps({str(k): v for k, v in hand.cards.items()}),
+                    json.dumps({str(k): v for k, v in hand.winnings.items()}),
                     hand.completed,
                 ),
             )
