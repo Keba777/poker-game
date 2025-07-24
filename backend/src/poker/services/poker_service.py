@@ -4,23 +4,28 @@ from ..models.hand import Hand
 from ..models.player import Player
 from ..repositories.hand_repository import HandRepository
 
-
 class PokerService:
     def __init__(self):
         self.repo = HandRepository()
 
     def process_hand(self, hand_data: dict) -> Hand:
-        players = [
-            Player(
-                uuid.UUID(p["id"]),
-                p["stack"],
-                p["position"],
-                p.get("is_dealer", False),
-                p.get("is_small_blind", False),
-                p.get("is_big_blind", False),
+        players = []
+        for p in hand_data["players"]:
+            try:
+                player_id = uuid.UUID(p["id"])
+            except ValueError:
+                player_id = uuid.uuid4()  # Generate a new UUID if invalid
+                print(f"Invalid UUID for player {p['id']}, generated new: {player_id}")
+            players.append(
+                Player(
+                    player_id,
+                    p["stack"],
+                    p["position"],
+                    p.get("is_dealer", False),
+                    p.get("is_small_blind", False),
+                    p.get("is_big_blind", False),
+                )
             )
-            for p in hand_data["players"]
-        ]
         cards = {uuid.UUID(k): v for k, v in hand_data["cards"].items()}
         actions = hand_data["actions"]
         hand_id = uuid.uuid4()
@@ -59,7 +64,6 @@ class PokerService:
             except ValueError as e:
                 print(f"Skipping invalid action '{action}': {e}")
                 break
-
 
         winnings = {p.id: state.payoffs[i] for i, p in enumerate(players)}
         hand = Hand(hand_id, players, actions, cards, winnings, True)

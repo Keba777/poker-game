@@ -1,11 +1,24 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # 👈 import this
 from pydantic import BaseModel
 from src.poker.repositories.hand_repository import HandRepository
 from src.poker.services.poker_service import PokerService
 
-
 app = FastAPI()
 
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class HandCreate(BaseModel):
     players: list[dict]

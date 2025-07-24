@@ -1,13 +1,22 @@
-import { GameLogic } from "./GameLogic";
+import { useGame } from "@/context/gameContext";
+import { useEffect, useState } from "react";
 
-export function PlayLog({ game }: { game: GameLogic }) {
-  const log = game.getPlayLog();
+export function PlayLog() {
+  const { game } = useGame();
+  const [log, setLog] = useState<string[]>([]);
+
+  useEffect(() => {
+    setLog(game.getPlayLog());
+  }, [game.getPlayLog()]);
+
   return (
-    <div className="mb-4 p-4 bg-white rounded shadow">
-      <h2 className="text-lg font-bold mb-2">Play Log</h2>
-      <ul>
+    <div className="bg-card p-4 rounded-lg shadow">
+      <h2 className="text-lg font-bold mb-2">Playing field log</h2>
+      <ul className="text-foreground">
         {log.map((entry, index) => (
-          <li key={index}>{entry}</li>
+          <li key={index} className="py-1">
+            {entry}
+          </li>
         ))}
       </ul>
     </div>
