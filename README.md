@@ -5,9 +5,9 @@ A simplified full-stack Texas Hold'em Poker simulation game. This project consis
 ## 📁 Project Structure
 
 poker-game/
-├── backend/ # FastAPI backend using Poetry, raw SQL, repository pattern
-├── frontend/ # Next.js frontend with shadcn/ui components
-└── docker-compose.yml # Full stack orchestration with PostgreSQL
+├── backend/  FastAPI backend using Poetry, raw SQL, repository pattern
+├── frontend/  Next.js frontend with shadcn/ui components
+└── docker-compose.yml  Full stack orchestration with PostgreSQL
 
 markdown
 Copy
@@ -55,11 +55,11 @@ Edit
 ### 1️⃣ Clone and Setup
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Keba777/poker-game.git
 cd poker-game
-2️⃣ Run with Docker Compose
-Ensure Docker is installed, then:
 ```
+### 2️⃣ Run with Docker Compose
+Ensure Docker is installed, then:
 ```bash
 docker compose up -d
 ```
