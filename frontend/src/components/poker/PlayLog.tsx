@@ -6,12 +6,12 @@ export function PlayLog() {
   const [log, setLog] = useState<string[]>([]);
 
   useEffect(() => {
-    setLog(game.getPlayLog()); // initial
+    setLog(game.getPlayLog()); 
     const interval = setInterval(() => {
       setLog(game.getPlayLog());
     }, 500);
     return () => clearInterval(interval);
-  }, [game]);
+  }, [game, game.getVersion()]); 
 
   return (
     <div className="bg-card p-4 rounded-lg shadow">

@@ -21,7 +21,7 @@ export function ActionControls({ game, playerId }: ActionControlsProps) {
 
   useEffect(() => {
     updateDisabledActions();
-  }, [game.getCurrentHand(), playerId]);
+  }, [game.getCurrentHand(), game.getVersion(), playerId]); // Add getVersion()
 
   const updateDisabledActions = () => {
     if (!game.getCurrentHand()) return;
@@ -31,7 +31,7 @@ export function ActionControls({ game, playerId }: ActionControlsProps) {
       call: !game.isActionValid(playerId, "call"),
       bet: !game.isActionValid(playerId, "bet"),
       raise: !game.isActionValid(playerId, "raise"),
-      allin: false, // Simplified; adjust based on stack
+      allin: false,
     });
   };
 

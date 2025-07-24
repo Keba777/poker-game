@@ -5,8 +5,7 @@ import { GameLogic } from "./GameLogic";
 import { PlayLog } from "./PlayLog";
 
 export function PlayerControls({ game }: { game: GameLogic }) {
-  const [stackInput, setStackInput] = useState("10000"); // Match wireframe default
-  const players = game.getCurrentHand()?.players || [];
+  const [stackInput, setStackInput] = useState("10000");
 
   const handleReset = () => {
     game.startHand();
@@ -15,7 +14,7 @@ export function PlayerControls({ game }: { game: GameLogic }) {
   const handleApply = () => {
     const stack = Number(stackInput);
     if (!isNaN(stack)) {
-      players.forEach((p) => (p.stack = stack));
+      game.updatePlayerStacks(stack);
     }
   };
 

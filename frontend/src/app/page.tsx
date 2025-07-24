@@ -23,7 +23,6 @@ function HomeContent() {
           {currentPlayerId && (
             <ActionControls game={game} playerId={currentPlayerId} />
           )}
-          
         </div>
         <div>
           <HandHistory />

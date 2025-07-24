@@ -10,12 +10,13 @@ export class GameLogic {
     private playLog: string[] = [];
     private handHistory: Hand[] = [];
     private hasStarted = false;
-    private round = "preflop"; // Track rounds: preflop, flop, turn, river
+    private round = "preflop";
+    private version = 0; // Add version to track state changes
 
     constructor() {
         this.players = Array.from({ length: NUM_PLAYERS }, (_, i) => ({
             id: crypto.randomUUID(),
-            stack: 10000, // Match wireframe default
+            stack: 10000,
             position: i,
         }));
         this.assignRoles();
@@ -45,18 +46,20 @@ export class GameLogic {
         ];
         this.dealCards();
         this.hasStarted = true;
+        this.version++; // Increment version
     }
 
     dealCards() {
         if (this.currentHand) {
             this.currentHand.players.forEach((player) => {
-                this.currentHand!.cards[player.id] = this.generateRandomCards(); // Random cards
+                this.currentHand!.cards[player.id] = this.generateRandomCards();
             });
             this.playLog.push(
                 ...this.currentHand.players.map(
                     (p) => `Player ${p.id.slice(0, 4)} is dealt ${this.currentHand!.cards[p.id].join(", ")}`
                 )
             );
+            this.version++; // Increment version
         }
     }
 
@@ -67,7 +70,7 @@ export class GameLogic {
         let card2;
         do {
             card2 = `${ranks[Math.floor(Math.random() * ranks.length)]}${suits[Math.floor(Math.random() * suits.length)]}`;
-        } while (card1 === card2); // Ensure different cards
+        } while (card1 === card2);
         return [card1, card2];
     }
 
@@ -109,6 +112,7 @@ export class GameLogic {
             default:
                 return false;
         }
+        this.version++; // Increment version
         this.checkRoundCompletion();
         return true;
     }
@@ -124,35 +128,37 @@ export class GameLogic {
             switch (this.round) {
                 case "preflop":
                     this.round = "flop";
-                    this.playLog.push(`Flop cards dealt: 5c6c7c`); // Placeholder
+                    this.playLog.push(`Flop cards dealt: 5c6c7c`);
                     this.currentHand.actions.push("5c6c7c");
                     break;
                 case "flop":
                     this.round = "turn";
-                    this.playLog.push(`Turn card dealt: 8d`); // Placeholder
+                    this.playLog.push(`Turn card dealt: 8d`);
                     this.currentHand.actions.push("8d");
                     break;
                 case "turn":
                     this.round = "river";
-                    this.playLog.push(`River card dealt: Ts`); // Placeholder
+                    this.playLog.push(`River card dealt: Ts`);
                     this.currentHand.actions.push("Ts");
                     break;
                 case "river":
                     this.completeHand();
                     break;
             }
+            this.version++; // Increment version
         }
     }
 
     async completeHand() {
         if (this.currentHand) {
             this.currentHand.completed = true;
-            this.currentHand.winnings = { [this.currentHand.players[0].id]: 400 }; // Placeholder
+            this.currentHand.winnings = { [this.currentHand.players[0].id]: 400 };
             this.playLog.push(`Hand #${this.currentHand.id.slice(0, 8)} ended`);
             await this.saveHand();
             this.handHistory.push({ ...this.currentHand });
             this.currentHand = null;
             this.round = "preflop";
+            this.version++; // Increment version
         }
     }
 
@@ -167,6 +173,15 @@ export class GameLogic {
         }
     }
 
+    updatePlayerStacks(stack: number) {
+        this.players.forEach((p) => (p.stack = stack));
+        if (this.currentHand) {
+            this.currentHand.players.forEach((p) => (p.stack = stack));
+            this.playLog.push(`All players' stacks updated to ${stack}`);
+            this.version++; // Increment version
+        }
+    }
+
     getCurrentHand() {
         return this.currentHand;
     }
@@ -175,11 +190,15 @@ export class GameLogic {
         return this.playLog;
     }
 
+    getVersion() {
+        return this.version; // Expose version
+    }
+
     getHandHistory() {
         return this.handHistory;
     }
 
-    isActionValid(playerId: string, action: string, amount?: number) {
+    isActionValid(playerId: string, action: string) {
         if (!this.currentHand) return false;
         const lastAction = this.currentHand.actions[this.currentHand.actions.length - 1];
         switch (action) {
