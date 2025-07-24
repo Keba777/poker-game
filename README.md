@@ -6,12 +6,11 @@ A simplified full-stack Texas Hold'em Poker simulation game. This project consis
 
 poker-game/
 ├── backend/  FastAPI backend using Poetry, raw SQL, repository pattern
+
 ├── frontend/  Next.js frontend with shadcn/ui components
+
 └── docker-compose.yml  Full stack orchestration with PostgreSQL
 
-markdown
-Copy
-Edit
 
 ---
 
