@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { PlayerControls } from "@/components/poker/PlayerControls";
-import { PlayLog } from "@/components/poker/PlayLog";
 import { HandHistory } from "@/components/poker/HandHistory";
 import { ActionControls } from "@/components/poker/ActionControls";
 import { GameProvider, useGame } from "@/context/gameContext";
@@ -24,7 +23,7 @@ function HomeContent() {
           {currentPlayerId && (
             <ActionControls game={game} playerId={currentPlayerId} />
           )}
-          <PlayLog />
+          
         </div>
         <div>
           <HandHistory />

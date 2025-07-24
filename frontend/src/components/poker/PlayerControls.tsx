@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GameLogic } from "./GameLogic";
+import { PlayLog } from "./PlayLog";
 
 export function PlayerControls({ game }: { game: GameLogic }) {
   const [stackInput, setStackInput] = useState("10000"); // Match wireframe default
@@ -41,18 +42,7 @@ export function PlayerControls({ game }: { game: GameLogic }) {
           {game.getHasStarted() ? "Reset" : "Start"}
         </Button>
       </div>
-      <div className="space-y-2">
-        {players.map((p) => (
-          <div key={p.id} className="flex items-center gap-2">
-            <span>
-              Player {p.id.slice(0, 4)}: {p.stack}
-            </span>
-            {p.isDealer && <span className="text-yellow-500">Dealer</span>}
-            {p.isSmallBlind && <span className="text-purple-500">SB</span>}
-            {p.isBigBlind && <span className="text-red-500">BB</span>}
-          </div>
-        ))}
-      </div>
+      <PlayLog />
     </div>
   );
 }
